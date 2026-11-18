@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars (git-ignored) and adjust.
+aws_region  = "us-east-1"
+environment = "dev"
+
+# Keep 0 until you intentionally want compute. A plan with 0 creates no EC2 cost.
+instance_count = 0
+
+# Never widen this to 0.0.0.0/0.
+allowed_admin_cidr = "10.0.0.0/8"
+
+# Optional: receive CloudWatch alarms by email (confirm the SNS subscription).
+alarm_email = ""

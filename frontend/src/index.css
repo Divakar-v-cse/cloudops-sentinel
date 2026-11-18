@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-slate-100 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  * {
+    @apply border-slate-200 dark:border-slate-800;
+  }
+  ::selection {
+    @apply bg-brand-500/30;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border bg-white shadow-card dark:bg-slate-900;
+  }
+  .card-header {
+    @apply flex items-start justify-between gap-3 border-b px-5 py-4;
+  }
+  .card-title {
+    @apply text-sm font-semibold text-slate-900 dark:text-slate-100;
+  }
+  .card-subtitle {
+    @apply mt-0.5 text-xs text-slate-500 dark:text-slate-400;
+  }
+  .card-body {
+    @apply px-5 py-4;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium
+      transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply border-brand-600 bg-brand-600 text-white hover:bg-brand-700 dark:border-brand-500 dark:bg-brand-500 dark:hover:bg-brand-600;
+  }
+  .btn-secondary {
+    @apply border bg-white text-slate-700 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800;
+  }
+  .btn-danger {
+    @apply border-rose-600 bg-rose-600 text-white hover:bg-rose-700;
+  }
+  .btn-ghost {
+    @apply border-transparent bg-transparent text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800;
+  }
+  .btn-xs {
+    @apply px-2 py-1 text-[11px];
+  }
+
+  .input {
+    @apply w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none
+      placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25
+      dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500;
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium;
+  }
+  .badge-critical {
+    @apply border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300;
+  }
+  .badge-high {
+    @apply border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-300;
+  }
+  .badge-medium {
+    @apply border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300;
+  }
+  .badge-low {
+    @apply border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300;
+  }
+  .badge-success {
+    @apply border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300;
+  }
+  .badge-neutral {
+    @apply border-slate-400/30 bg-slate-500/10 text-slate-600 dark:text-slate-300;
+  }
+  .badge-info {
+    @apply border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300;
+  }
+
+  .table {
+    @apply w-full text-left text-sm;
+  }
+  .table thead th {
+    @apply whitespace-nowrap border-b px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400;
+  }
+  .table tbody td {
+    @apply border-b px-4 py-2.5 align-middle text-slate-700 dark:text-slate-200;
+  }
+  .table tbody tr:hover {
+    @apply bg-slate-50 dark:bg-slate-800/40;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium text-slate-600
+      transition-colors hover:bg-slate-200/60 hover:text-slate-900
+      dark:text-slate-400 dark:hover:bg-slate-800/70 dark:hover:text-slate-100;
+  }
+  .nav-link-active {
+    @apply bg-brand-50 text-brand-700 hover:bg-brand-50 hover:text-brand-700
+      dark:bg-brand-500/15 dark:text-brand-200 dark:hover:bg-brand-500/20;
+  }
+  .kbd {
+    @apply rounded border bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] text-slate-500 dark:bg-slate-800 dark:text-slate-400;
+  }
+  .code-block {
+    @apply overflow-x-auto rounded-lg border bg-slate-950 p-3 font-mono text-[11.5px] leading-relaxed text-slate-200;
+  }
+}
+
+/* thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.45);
+  border-radius: 8px;
+}

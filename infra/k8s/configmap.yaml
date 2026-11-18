@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sentinel-config
+  namespace: cloudops-sentinel
+data:
+  ENVIRONMENT: "production"
+  ENABLE_SCHEDULER: "true"
+  MONITORING_INTERVAL_SECONDS: "30"
+  AWS_SIMULATION_MODE: "true"
+  AWS_REGION: "us-east-1"
+  AI_PROVIDER: "none"
+  AI_BASE_URL: "https://api.openai.com/v1"
+  AI_MODEL: "gpt-4o-mini"
+  LOG_RETENTION_DAYS: "14"
+  COST_BUDGET_USD: "3000"
+  CORS_ORIGINS: "https://sentinel.example.com"
