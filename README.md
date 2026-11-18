@@ -280,7 +280,9 @@ CloudWatch alarms. The provider lock file is committed for reproducibility.
   approval gate for production.
 
 Details and required secrets: [cicd/README.md](cicd/README.md). The workflows were syntax-reviewed and the
-equivalent commands run locally; **no GitHub-hosted run has executed yet** — the first push will trigger CI.
+equivalent commands run locally; **CI is green on GitHub:** run [44290903219](https://github.com/Divakar-v-cse/cloudops-sentinel/actions/runs/44290903219)
+— all 6 jobs passed (backend lint + tests, frontend build, dependency/code scan, Docker build + Trivy,
+Terraform validation, compose/manifest validation).
 
 ---
 
@@ -326,8 +328,11 @@ Verified in this build environment:
 | Terraform | `fmt -check` + `validate` passing |
 | Compose / manifests | `docker compose config` + `kubectl kustomize` valid |
 
-Not verified here: a GitHub-hosted CI run (no push before this commit), container image builds, cluster
-deployment, and any real AWS call.
+| GitHub Actions CI | **6/6 jobs passing** ([run 44290903219](https://github.com/Divakar-v-cse/cloudops-sentinel/actions/runs/44290903219)) |
+| Container images | frontend image built locally and in CI; backend image built in CI |
+
+Still not verified: a live Kubernetes deployment, a real AWS account scan, and the release workflow (it runs
+only on a version tag and needs deployment secrets that are not configured).
 
 ---
 
