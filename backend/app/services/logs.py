@@ -66,7 +66,11 @@ def normalise_message(message: str) -> str:
 
 
 def fingerprint(service: str, message: str) -> str:
-    return hashlib.sha1(f"{service}:{normalise_message(message)}".encode("utf-8")).hexdigest()[:16]
+    # SHA-1 is used only as a stable grouping key for log lines, never for
+    # authentication or integrity, hence usedforsecurity=False.
+    return hashlib.sha1(
+        f"{service}:{normalise_message(message)}".encode("utf-8"), usedforsecurity=False
+    ).hexdigest()[:16]
 
 
 def classify(level: str | None, message: str) -> tuple[str, str]:

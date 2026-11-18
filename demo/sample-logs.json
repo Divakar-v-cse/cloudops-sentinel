@@ -1,0 +1,46 @@
+{
+  "logs": [
+    {
+      "service": "order-worker",
+      "level": "ERROR",
+      "message": "Container terminated with reason OOMKilled (memory limit 2Gi) while processing batch order-sync-4471",
+      "trace_id": "trc-demo-0001",
+      "metadata": { "namespace": "production", "pod": "order-worker-7d9f8c", "demo": true }
+    },
+    {
+      "service": "order-worker",
+      "level": "ERROR",
+      "message": "Task order.reconcile failed: no space left on device",
+      "trace_id": "trc-demo-0002",
+      "metadata": { "volume": "/var/lib/orders", "demo": true }
+    },
+    {
+      "service": "checkout-api",
+      "level": "ERROR",
+      "message": "Payment provider timeout after 3000ms for order 882134 (trace trc-demo-0003)",
+      "trace_id": "trc-demo-0003",
+      "metadata": { "upstream": "payments-api", "demo": true }
+    },
+    {
+      "service": "payments-api",
+      "level": "ERROR",
+      "message": "psycopg2.OperationalError: remaining connection slots are reserved for non-replication superuser connections",
+      "trace_id": "trc-demo-0004",
+      "metadata": { "pool": "app_rw", "demo": true }
+    },
+    {
+      "service": "web-frontend",
+      "level": "ERROR",
+      "message": "502 Bad Gateway from upstream checkout-api",
+      "trace_id": "trc-demo-0005",
+      "metadata": { "edge": "nginx", "demo": true }
+    },
+    {
+      "service": "deploy-agent",
+      "level": "ERROR",
+      "message": "Deployment checkout-api:v2.14.0 failed: ImagePullBackOff for registry.internal/checkout-api",
+      "trace_id": "trc-demo-0006",
+      "metadata": { "pipeline": "sentinel-release", "demo": true }
+    }
+  ]
+}

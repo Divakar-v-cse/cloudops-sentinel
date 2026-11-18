@@ -46,7 +46,7 @@ PIPELINE_DEFINITIONS = [
     {
         "name": "sentinel-infrastructure",
         "platform": "terraform",
-        "config_path": "infra/terraform",
+        "config_path": "infrastructure/terraform",
         "stages": ["fmt-check", "validate", "plan", "apply-with-approval"],
     },
 ]

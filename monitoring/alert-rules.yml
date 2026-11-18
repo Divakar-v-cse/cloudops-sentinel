@@ -1,0 +1,40 @@
+# Alerting rules over the metrics exposed at GET /metrics
+groups:
+  - name: sentinel-platform
+    interval: 30s
+    rules:
+      - alert: SentinelNoRunningInstances
+        expr: sentinel_instances_running == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No running instances in Sentinel inventory"
+          description: "The inventory reports zero running instances, which usually means collection or discovery failed."
+
+      - alert: SentinelCriticalIncidentsOpen
+        expr: sentinel_incidents_critical_open > 0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $value }} critical incident(s) open for more than 10 minutes"
+          description: "Open the incident queue in CloudOps Sentinel and acknowledge or resolve them."
+
+      - alert: SentinelSecurityFindingsHigh
+        expr: sentinel_findings_open > 25
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "More than 25 open security findings"
+          description: "Review the security page, prioritise critical/high findings and re-run the scan after remediation."
+
+      - alert: SentinelTelemetryStalled
+        expr: increase(sentinel_metric_samples[10m]) == 0
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No new telemetry samples in 15 minutes"
+          description: "The scheduler may be disabled or failing. Check backend logs and ENABLE_SCHEDULER."

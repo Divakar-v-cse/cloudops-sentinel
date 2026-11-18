@@ -1,13 +1,14 @@
-fastapi==0.115.6
+fastapi==0.163.2
 uvicorn[standard]==0.34.0
 sqlalchemy==2.0.36
 alembic==1.14.0
 pydantic==2.10.4
 pydantic-settings==2.7.0
-python-multipart==0.0.20
-PyJWT==2.10.1
+python-multipart==0.0.34
+PyJWT==2.15.1
 httpx==0.28.1
 psutil==6.1.1
 boto3==1.35.90
 email-validator==2.2.0
 psycopg[binary]==3.2.3
+starlette==1.10.0

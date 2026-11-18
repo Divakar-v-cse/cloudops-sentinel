@@ -35,12 +35,11 @@ frontend/.vite/
 Thumbs.db
 
 # terraform
-infra/terraform/.terraform/
-infra/terraform/*.tfstate
-infra/terraform/*.tfstate.*
-infra/terraform/crash.log
-infra/terraform/terraform.tfvars
-infra/terraform/.terraform.lock.hcl
+infrastructure/terraform/.terraform/
+infrastructure/terraform/*.tfstate
+infrastructure/terraform/*.tfstate.*
+infrastructure/terraform/crash.log
+infrastructure/terraform/terraform.tfvars
 
 # reports
 reports/*.csv

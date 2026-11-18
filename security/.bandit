@@ -1,0 +1,17 @@
+# Bandit configuration — used by CI and scripts/security-scan.sh
+# Accepted, documented exceptions are listed under skips with a justification.
+exclude_dirs:
+  - .venv
+  - .git
+  - node_modules
+  - frontend
+  - backend/tests
+  - infrastructure
+  - security/reports
+
+# B105 (hardcoded password string): the development placeholder defaults in
+# app/core/config.py are environment-overridable and reported at startup via
+# settings.insecure_defaults. Removing them entirely would break zero-config
+# local startup, so they are accepted and documented in the security report.
+skips:
+  - B105

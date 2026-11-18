@@ -155,7 +155,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infra/terraform
+        working-directory: infrastructure/terraform
     steps:
       - uses: actions/checkout@v4
 
@@ -187,5 +187,5 @@ jobs:
 
       - name: Validate Kubernetes manifests
         run: |
-          docker run --rm -v "$PWD/infra/k8s:/manifests" ghcr.io/yannh/kubeconform:v0.6.7 \
+          docker run --rm -v "$PWD/infrastructure/kubernetes:/manifests" ghcr.io/yannh/kubeconform:v0.6.7 \
             -strict -summary -ignore-missing-schemas /manifests

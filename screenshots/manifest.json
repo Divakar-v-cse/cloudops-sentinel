@@ -1,0 +1,104 @@
+{
+  "capturedAt": "2026-11-18T10:44:37.010Z",
+  "baseUrl": "http://localhost:5173",
+  "pages": [
+    {
+      "slug": "00-login",
+      "route": "/login",
+      "title": "Sign in · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "overview",
+      "route": "/",
+      "title": "Overview · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "infrastructure",
+      "route": "/instances",
+      "title": "Infrastructure · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "instance-detail",
+      "route": "/instances/7",
+      "title": "Instance detail · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "monitoring",
+      "route": "/monitoring",
+      "title": "Monitoring · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "security",
+      "route": "/security",
+      "title": "Security findings · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "cost-optimization",
+      "route": "/costs",
+      "title": "Cost optimization · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "log-intelligence",
+      "route": "/logs",
+      "title": "Log intelligence · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "incidents",
+      "route": "/incidents",
+      "title": "Incidents · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "remediation",
+      "route": "/remediation",
+      "title": "Remediation · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "pipelines",
+      "route": "/pipelines",
+      "title": "CI/CD pipelines · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "aws-integrations",
+      "route": "/aws",
+      "title": "AWS integrations · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "audit-logs",
+      "route": "/audit",
+      "title": "Audit logs · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "slug": "settings",
+      "route": "/settings",
+      "title": "Settings · CloudOps Sentinel",
+      "consoleErrors": [],
+      "failedRequests": []
+    }
+  ]
+}

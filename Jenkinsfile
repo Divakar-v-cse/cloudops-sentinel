@@ -112,7 +112,7 @@ pipeline {
 
         stage('Terraform validate') {
             steps {
-                dir('infra/terraform') {
+                dir('infrastructure/terraform') {
                     sh 'terraform fmt -check -recursive'
                     sh 'terraform init -backend=false -input=false'
                     sh 'terraform validate -no-color'

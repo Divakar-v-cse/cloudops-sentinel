@@ -35,7 +35,7 @@ from app.services.audit import record_audit
 logger = logging.getLogger(__name__)
 
 BACKEND_DIR = Path(REPO_ROOT) / "backend"
-INFRA_DIR = Path(REPO_ROOT) / "infra"
+INFRA_DIR = Path(REPO_ROOT) / "infrastructure" / "terraform"
 TOOL_TIMEOUT = 120
 
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3, "info": 4}

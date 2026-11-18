@@ -11,7 +11,7 @@ resources:
   - hpa.yaml
 
 # Create the Secret before applying:
-#   kubectl apply -f infra/k8s/secret.example.yaml   # replace values first, or
+#   kubectl apply -f infrastructure/kubernetes/secret.example.yaml   # replace values first, or
 #   kubectl -n cloudops-sentinel create secret generic sentinel-secrets --from-literal=...
 # secret.example.yaml is intentionally NOT listed here so placeholder values are
 # never applied by accident.
