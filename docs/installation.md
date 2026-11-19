@@ -167,7 +167,7 @@ Expected: `{"total": 9, "by_source": {"local": 1, "simulated": 8, ...}}`.
 
 ```bash
 cd backend
-PYTHONPATH=. ../.venv/Scripts/python.exe -m pytest      # 45 tests
+PYTHONPATH=. ../.venv/Scripts/python.exe -m pytest      # 59 tests
 ruff check app tests
 
 cd ../frontend

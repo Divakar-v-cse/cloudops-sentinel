@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Query
 from app.api.deps import AdminUser, CurrentUser, DbSession, OperatorUser
 from app.core.config import settings
 from app.models import InfrastructureInstance, Metric, Threshold
-from app.schemas.domain import AlertOut, MetricOut, ThresholdOut, ThresholdUpdate
+from app.schemas.domain import AlertOut, MetricOut, SpikeRequest, ThresholdOut, ThresholdUpdate
 from app.services import dashboard as dashboard_service
 from app.services import monitoring
 from app.services.audit import record_audit
@@ -114,17 +114,14 @@ def trigger_collection(db: DbSession, operator: OperatorUser) -> dict:
 
 @router.post("/spike")
 def inject_spike(
-    payload: dict,
+    payload: SpikeRequest,
     db: DbSession,
     operator: OperatorUser,
 ) -> dict:
-    instance_id = payload.get("instance_id")
-    metric = payload.get("metric", "cpu_percent")
-    value = payload.get("value", 97)
-    minutes = int(payload.get("minutes", 3))
-    if metric not in {"cpu_percent", "memory_percent", "disk_percent"}:
-        raise HTTPException(status_code=422, detail="metric must be cpu_percent, memory_percent or disk_percent")
-    instance = db.get(InfrastructureInstance, instance_id) if instance_id else None
+    metric = payload.metric
+    value = payload.value
+    minutes = payload.minutes
+    instance = db.get(InfrastructureInstance, payload.instance_id)
     if instance is None:
         raise HTTPException(status_code=404, detail="Instance not found")
     if instance.source != "simulated":

@@ -50,6 +50,13 @@ is strict TypeScript.
 **Everything looks unlabelled** — simulated rows always render a `simulated` badge. If a cloud panel shows no
 badge and no data, the AWS call failed; check `/api/v1/aws/status`.
 
+**PATCH returns 200 but nothing changed** — fixed in this build. Request schemas now reject unknown fields
+with 422, so a mistyped key (for example `warning_percent` instead of `warning`) fails loudly instead of silently
+doing nothing.
+
+**`/aws/cloudwatch?instance_id=7` returns 422** — fixed. The parameter accepts either a Sentinel row id (digits)
+or an AWS instance id (`i-...`), and resolves the former to `external_id` when the resource was imported from AWS.
+
 ## Monitoring
 
 **No new metrics** — the scheduler is disabled (`ENABLE_SCHEDULER=false`) or the interval is long. Trigger

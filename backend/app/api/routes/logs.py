@@ -9,7 +9,7 @@ from app.api.deps import AdminUser, CurrentUser, DbSession, OperatorUser
 from app.core.config import settings
 from app.models import ApplicationLog
 from app.schemas.common import Paginated
-from app.schemas.domain import LogAnalysis, LogGroup, LogIngestRequest, LogOut
+from app.schemas.domain import LogAnalysis, LogAnalyzeRequest, LogGroup, LogIngestRequest, LogOut
 from app.services import logs as log_service
 from app.services.audit import record_audit
 
@@ -96,19 +96,16 @@ def services(db: DbSession, user: CurrentUser) -> list[dict]:
 
 @router.post("/analyze", response_model=LogAnalysis)
 def analyze(
-    payload: dict,
+    payload: LogAnalyzeRequest,
     db: DbSession,
     user: CurrentUser,
 ) -> LogAnalysis:
-    log_ids = payload.get("log_ids")
-    if log_ids is not None and not isinstance(log_ids, list):
-        log_ids = None
     result = log_service.analyse(
         db,
-        log_ids=[int(i) for i in log_ids] if log_ids else None,
-        fingerprint_value=payload.get("fingerprint"),
-        service=payload.get("service"),
-        hours=int(payload.get("hours", 24)),
+        log_ids=payload.log_ids,
+        fingerprint_value=payload.fingerprint,
+        service=payload.service,
+        hours=payload.hours,
     )
     record_audit(
         db,
@@ -118,7 +115,7 @@ def analyze(
         detail={
             "source": result["source"],
             "log_count": result.get("log_count", 0),
-            "service": payload.get("service"),
+            "service": payload.service,
         },
     )
     return LogAnalysis(**result)

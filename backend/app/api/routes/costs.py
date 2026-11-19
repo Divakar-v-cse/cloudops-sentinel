@@ -11,6 +11,7 @@ from app.schemas.domain import (
     CostSummary,
     CostTrendPoint,
     PricingOut,
+    PricingUpdate,
 )
 from app.services import cost as cost_service
 from app.services.audit import record_audit
@@ -41,7 +42,7 @@ def pricing(db: DbSession, user: CurrentUser) -> list[PricingOut]:
 @router.patch("/pricing/{instance_type}", response_model=PricingOut)
 def update_pricing(
     instance_type: str,
-    payload: dict,
+    payload: PricingUpdate,
     db: DbSession,
     admin: AdminUser,
 ) -> PricingOut:
@@ -52,23 +53,19 @@ def update_pricing(
     )
     if row is None:
         raise HTTPException(status_code=404, detail=f"No pricing assumption for '{instance_type}'")
-    if "hourly_usd" in payload:
-        try:
-            hourly = float(payload["hourly_usd"])
-        except (TypeError, ValueError):
-            raise HTTPException(status_code=422, detail="hourly_usd must be a number") from None
-        if hourly < 0:
-            raise HTTPException(status_code=422, detail="hourly_usd cannot be negative")
-        row.hourly_usd = hourly
-    if "ebs_gb_usd" in payload:
-        row.ebs_gb_usd = float(payload["ebs_gb_usd"])
+    if payload.hourly_usd is None and payload.ebs_gb_usd is None:
+        raise HTTPException(status_code=422, detail="provide hourly_usd and/or ebs_gb_usd")
+    if payload.hourly_usd is not None:
+        row.hourly_usd = payload.hourly_usd
+    if payload.ebs_gb_usd is not None:
+        row.ebs_gb_usd = payload.ebs_gb_usd
     db.commit()
     db.refresh(row)
     record_audit(
         db,
         actor=admin.email,
         action="pricing.updated",
-        entity_type="pricing",
+        entity_type="pricing_assumption",
         entity_id=row.instance_type,
         detail={"hourly_usd": row.hourly_usd, "ebs_gb_usd": row.ebs_gb_usd},
     )

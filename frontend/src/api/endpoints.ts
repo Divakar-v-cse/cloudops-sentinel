@@ -194,5 +194,5 @@ export const platformApi = {
   settings: () => unwrap<{ settings: { key: string; value: unknown; description: string | null; updated_at: string }[]; runtime: RuntimeInfo }>(api.get('/settings')),
   updateRetention: (days: number) => unwrap<{ retention_days: number }>(api.patch('/settings/log-retention', null, { params: { days } })),
   cleanup: () => unwrap<{ deleted: number; retention_days: number }>(api.post('/settings/cleanup')),
-  health: () => unwrap<{ status: string; version: string; database: string }>(api.get('/../health')),
+  health: () => unwrap<{ status: string; version: string; database: string }>(api.get('/health')),
 }

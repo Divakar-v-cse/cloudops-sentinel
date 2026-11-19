@@ -1,5 +1,7 @@
 # CloudOps Sentinel
 
+[![sentinel-ci](https://github.com/Divakar-v-cse/cloudops-sentinel/actions/workflows/ci.yml/badge.svg)](https://github.com/Divakar-v-cse/cloudops-sentinel/actions/workflows/ci.yml)
+
 **AI-powered cloud operations and auto-remediation platform** — infrastructure monitoring, AWS inventory,
 security scanning, cost optimisation, log intelligence, incident response and human-approved remediation in one
 console.
@@ -79,7 +81,7 @@ Full component and sequence diagrams, the provenance contract and failure behavi
 
 ```
 cloudops-sentinel/
-├── backend/                  FastAPI app, 17 SQLAlchemy models, Alembic, 45 tests
+├── backend/                  FastAPI app, 17 SQLAlchemy models, Alembic, 59 tests
 │   ├── app/{api,core,db,models,schemas,services}
 │   ├── alembic/versions/     initial migration (verified against a fresh DB)
 │   └── tests/
@@ -193,7 +195,7 @@ AWS, audit, notifications and settings.
 
 ```bash
 cd backend
-PYTHONPATH=. pytest                  # 45 tests, temporary SQLite, scheduler off
+PYTHONPATH=. pytest                  # 59 tests, temporary SQLite, scheduler off
 ruff check app tests
 cd ../frontend && npm run build      # tsc -b + vite build
 
@@ -201,7 +203,7 @@ cd ../frontend && npm run build      # tsc -b + vite build
 python tests/integration/live_api_check.py --base-url http://127.0.0.1:8000
 ```
 
-**Measured in this environment:** 45/45 pytest · ruff clean · frontend production build succeeds · live
+**Measured in this environment:** 59/59 pytest · ruff clean · frontend production build succeeds · live
 integration check **33/33** · Playwright captures 14 pages with **0 console errors**.
 
 Test layers: [tests/README.md](tests/README.md).
@@ -272,7 +274,7 @@ CloudWatch alarms. The provider lock file is committed for reproducibility.
 
 ## CI/CD
 
-* [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — backend lint + 45 tests, frontend build,
+* [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — backend lint + 59 tests, frontend build,
   dependency/code scan, Docker build + Trivy, Terraform fmt/validate, compose + manifest validation.
 * [`.github/workflows/release.yml`](.github/workflows/release.yml) — GHCR push, staging deploy, **manual
   production approval**, smoke test.
@@ -318,10 +320,11 @@ Verified in this build environment:
 
 | Check | Result |
 | --- | --- |
-| Backend tests | **45 passed** |
+| Backend tests | **59 passed** |
 | Lint | `ruff` clean |
 | Frontend build | `tsc -b && vite build` succeeded |
 | Live API integration | **33/33 passed** |
+| Endpoint sweep | 96 requests, **0 unexpected responses** |
 | Browser pages | 14 captured, **0 console errors** |
 | Bandit | 0 high, 0 medium, 18 low (accepted/documented) |
 | pip-audit | **0 vulnerabilities** / 44 packages |

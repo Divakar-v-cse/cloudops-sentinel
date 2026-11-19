@@ -43,7 +43,7 @@ Send it as `Authorization: Bearer <token>`. Tokens are HS256, expire after
 | 403 | Authenticated but the role is insufficient, or self-approval attempted |
 | 404 | Entity not found |
 | 409 | Illegal state transition (e.g. `detected → closed`, execute before approval) |
-| 422 | Validation error (Pydantic detail array) |
+| 422 | Validation error (Pydantic detail array). Request bodies are strict: an unknown field is rejected rather than silently ignored |
 | 500 | Unhandled server error (generic message; details stay in logs) |
 
 ---

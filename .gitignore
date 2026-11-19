@@ -47,3 +47,9 @@ reports/*.json
 
 # build metadata
 *.tsbuildinfo
+
+# local scratch scripts
+/_*.py
+/_*.txt
+/sweep.py
+/bughunt*.db

@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from typing import Annotated, Any, Literal
 
-from pydantic import AfterValidator, BaseModel, Field, field_validator
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, field_validator
 
 from app.schemas.common import ORMModel
 
@@ -91,6 +91,7 @@ class InstanceOut(ORMModel):
 
 
 class InstanceCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     name: str = Field(min_length=2, max_length=120)
     instance_type: str = "t3.medium"
     region: str = "us-east-1"
@@ -103,6 +104,7 @@ class InstanceCreate(BaseModel):
 
 
 class InstanceUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     name: str | None = None
     environment: str | None = None
     assigned_team: str | None = None
@@ -145,6 +147,7 @@ class ThresholdOut(ORMModel):
 
 
 class ThresholdUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     warning: float | None = None
     critical: float | None = None
     enabled: bool | None = None
@@ -190,6 +193,7 @@ class FindingOut(ORMModel):
 
 
 class ScanRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     tools: list[str] | None = None
     include_cloud: bool = True
     resolve_missing: bool = False
@@ -265,6 +269,7 @@ class PricingOut(ORMModel):
 
 
 class BudgetUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     budget_usd: float = Field(gt=0)
 
 
@@ -355,6 +360,7 @@ class IncidentDetail(IncidentOut):
 
 
 class IncidentCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     title: str = Field(min_length=4, max_length=240)
     description: str = ""
     severity: Literal["critical", "high", "medium", "low"] = "medium"
@@ -365,6 +371,7 @@ class IncidentCreate(BaseModel):
 
 
 class IncidentUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     severity: Literal["critical", "high", "medium", "low"] | None = None
     assigned_to: str | None = None
     service: str | None = None
@@ -372,6 +379,7 @@ class IncidentUpdate(BaseModel):
 
 
 class IncidentStatusChange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     status: Literal["acknowledged", "investigating", "resolved", "closed", "reopened"]
     note: str | None = None
     resolution_summary: str | None = None
@@ -379,6 +387,7 @@ class IncidentStatusChange(BaseModel):
 
 
 class IncidentNoteCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     note: str = Field(min_length=1, max_length=4000)
     note_type: Literal["investigation", "comment", "action", "resolution"] = "investigation"
 
@@ -400,6 +409,7 @@ class RuleOut(ORMModel):
 
 
 class RuleCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     name: str = Field(min_length=3, max_length=160)
     description: str = ""
     metric: Literal["cpu_percent", "memory_percent", "disk_percent", "network_in_kbps"] = "cpu_percent"
@@ -413,6 +423,7 @@ class RuleCreate(BaseModel):
 
 
 class RuleUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     enabled: bool | None = None
     threshold: float | None = None
     dry_run: bool | None = None
@@ -441,6 +452,7 @@ class ActionOut(ORMModel):
 
 
 class ActionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     action_name: str
     instance_id: int | None = None
     incident_id: int | None = None
@@ -450,6 +462,7 @@ class ActionRequest(BaseModel):
 
 
 class ApprovalRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     note: str | None = None
 
 
@@ -540,3 +553,35 @@ class NotificationOut(ORMModel):
 
 
 Token.model_rebuild()
+
+
+# ============================================================================
+# Request payloads that previously arrived as unvalidated ``dict``s. Typed and
+# strict (extra="forbid") so a mistyped key fails with 422 instead of silently
+# doing nothing, and a wrong type can never raise a 500.
+# ============================================================================
+class StrictRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class LogAnalyzeRequest(StrictRequest):
+    fingerprint: str | None = None
+    service: str | None = None
+    hours: int = Field(default=24, ge=1, le=720)
+    log_ids: list[int] | None = None
+
+
+class FindingStatusUpdate(StrictRequest):
+    status: Literal["open", "acknowledged", "resolved", "false_positive"]
+
+
+class PricingUpdate(StrictRequest):
+    hourly_usd: float | None = Field(default=None, gt=0, le=100)
+    ebs_gb_usd: float | None = Field(default=None, ge=0, le=10)
+
+
+class SpikeRequest(StrictRequest):
+    instance_id: int = Field(gt=0)
+    metric: Literal["cpu_percent", "memory_percent", "disk_percent"] = "cpu_percent"
+    value: float = Field(default=97.0, ge=0, le=100)
+    minutes: int = Field(default=3, ge=1, le=60)

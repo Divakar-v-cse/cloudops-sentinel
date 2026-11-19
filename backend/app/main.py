@@ -134,6 +134,12 @@ def root() -> dict:
     }
 
 
+@app.get("/api/v1/health", tags=["meta"], response_model=HealthResponse, include_in_schema=False)
+def api_health() -> HealthResponse:
+    """Same probe as ``/health``, mounted under the prefix the SPA's client uses."""
+    return health()
+
+
 @app.get("/health", tags=["meta"], response_model=HealthResponse)
 def health() -> HealthResponse:
     database = "ok"

@@ -167,13 +167,19 @@ def change_status(
     incident = db.get(Incident, incident_id)
     if incident is None:
         raise HTTPException(status_code=404, detail="Incident not found")
+    # The UI may offer "Reopen"; the state machine models a reopen as a return
+    # to DETECTED, so translate rather than reject a valid user action.
+    target_status = "detected" if payload.status == "reopened" else payload.status
+    note = payload.note
+    if payload.status == "reopened" and not note:
+        note = "Incident reopened"
     try:
         incident_service.change_status(
             db,
             incident,
-            new_status=payload.status,
+            new_status=target_status,
             actor=analyst.email,
-            note=payload.note,
+            note=note,
             resolution_summary=payload.resolution_summary,
             resolution_category=payload.resolution_category,
         )

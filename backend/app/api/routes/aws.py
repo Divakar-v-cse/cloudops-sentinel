@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 from app.api.deps import AdminUser, CurrentUser, DbSession
+from app.models import InfrastructureInstance
 from app.schemas.domain import AwsStatus
 from app.services import aws as aws_service
 from app.services.audit import record_audit
@@ -59,12 +60,26 @@ def security_groups(user: CurrentUser) -> dict:
 
 @router.get("/cloudwatch")
 def cloudwatch(
+    db: DbSession,
     user: CurrentUser,
-    instance_id: str = Query(min_length=3),
+    instance_id: str = Query(min_length=1, description="AWS instance id (i-...) or Sentinel instance id"),
     hours: int = Query(default=6, ge=1, le=72),
     metric: str = Query(default="CPUUtilization"),
 ) -> dict:
-    return aws_service.cloudwatch_metrics(instance_id, hours=hours, metric_name=metric)
+    # The UI knows the Sentinel row id, while CloudWatch needs the AWS id.
+    # Accept either so callers do not have to resolve it themselves.
+    resolved = instance_id
+    if instance_id.isdigit():
+        row = db.get(InfrastructureInstance, int(instance_id))
+        if row is None:
+            raise HTTPException(status_code=404, detail="Instance not found")
+        if not row.external_id:
+            raise HTTPException(
+                status_code=422,
+                detail="Instance has no AWS instance id; CloudWatch is only available for imported AWS resources",
+            )
+        resolved = row.external_id
+    return aws_service.cloudwatch_metrics(resolved, hours=hours, metric_name=metric)
 
 
 @router.post("/refresh")

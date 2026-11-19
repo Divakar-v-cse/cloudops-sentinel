@@ -9,7 +9,7 @@ from sqlalchemy import func, or_
 from app.api.deps import CurrentUser, DbSession, OperatorUser
 from app.models import SecurityFinding
 from app.schemas.common import Paginated
-from app.schemas.domain import FindingOut, ScanRequest, ScanResult
+from app.schemas.domain import FindingOut, FindingStatusUpdate, ScanRequest, ScanResult
 from app.services import security_scan
 from app.services.audit import record_audit
 
@@ -97,18 +97,14 @@ def get_finding(finding_id: int, db: DbSession, user: CurrentUser) -> FindingOut
 @router.patch("/findings/{finding_id}", response_model=FindingOut)
 def update_finding(
     finding_id: int,
-    payload: dict,
+    payload: FindingStatusUpdate,
     db: DbSession,
     operator: OperatorUser,
 ) -> FindingOut:
     row = db.get(SecurityFinding, finding_id)
     if row is None:
         raise HTTPException(status_code=404, detail="Finding not found")
-    new_status = payload.get("status")
-    if new_status not in {"open", "acknowledged", "resolved", "false_positive"}:
-        raise HTTPException(
-            status_code=422, detail="status must be open, acknowledged, resolved or false_positive"
-        )
+    new_status = payload.status
     row.status = new_status
     db.commit()
     db.refresh(row)

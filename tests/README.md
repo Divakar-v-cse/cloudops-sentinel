@@ -2,7 +2,7 @@
 
 Two layers, deliberately separated by what they need.
 
-## 1. Backend unit / API tests — `backend/tests/` (45 tests)
+## 1. Backend unit / API tests — `backend/tests/` (59 tests)
 
 Self-contained: they create a temporary SQLite database, disable the scheduler and exercise the FastAPI app
 through `TestClient`. No running server, no network, no AWS.
@@ -19,6 +19,7 @@ PYTHONPATH=. pytest            # or: pytest -q
 | `test_security.py` | finding provenance labels, open SSH/RDP detection, scan tool outcomes, unavailable-tool honesty, JSON/CSV downloads, status updates, risk score |
 | `test_logs_and_costs.py` | severity classification (incl. OOM escalation), search filters, fingerprint grouping, rule-based fallback, cost estimate labelling, recommendations, admin-only budget, negative pricing rejection |
 | `test_incidents_remediation.py` | full lifecycle + illegal transitions + resolution summary requirement, notes, stats, allowlist, dry-run, four-eyes approval, execute-before-approve, rule validation |
+| `test_hardening.py` | Strict request validation (unknown field → 422, wrong type → 422 not 500), CloudWatch numeric ids, incident reopen translation, `/api/v1/health` alias |
 | `test_platform.py` | dashboard aggregation, AWS honesty, pipeline discovery, deployment ingest, audit trail, notifications, secret masking, simulated-only power actions |
 
 ## 2. Live API integration check — `tests/integration/live_api_check.py`
@@ -35,6 +36,15 @@ python tests/integration/live_api_check.py --email engineer@cloudops.local --pas
 ```
 
 Prints a PASS/FAIL line per assertion and exits non-zero on failure.
+
+### Endpoint sweep — `tests/integration/endpoint_sweep.py`
+
+Calls every route, including negative cases (bad types, unknown ids, illegal transitions), and fails if any
+response is a 5xx or an unexpected status. Useful after changing schemas or adding routes.
+
+```bash
+python tests/integration/endpoint_sweep.py --base-url http://127.0.0.1:8000
+```
 
 ## 3. Frontend
 
