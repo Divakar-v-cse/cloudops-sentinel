@@ -53,3 +53,12 @@ reports/*.json
 /_*.txt
 /sweep.py
 /bughunt*.db
+
+# LinkedIn asset working directories (only the curated pack is committed)
+/linkedin/carousels/
+/linkedin/covers/
+/linkedin/diagrams/
+/linkedin/social/
+/linkedin/captions/
+/linkedin/content/
+/linkedin/build.mjs
